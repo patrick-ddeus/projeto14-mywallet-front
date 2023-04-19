@@ -3,11 +3,13 @@ import Button from '../../../components/Button';
 import InputField from '../../../components/InputField';
 import { Container } from './styles';
 import MyWalletApi from '../../../service/myWallet.api';
+import { AuthContext } from '../../../contexts/AuthProvider';
 
 const Form = () => {
     const emailRef = React.useRef(null);
     const passwordRef = React.useRef(null);
     const [loading, setLoading] = React.useState(false);
+    const { login } = React.useContext(AuthContext);
 
     async function handleLogin() {
         setLoading(true);
@@ -19,8 +21,8 @@ const Form = () => {
 
         try {
             const response = await MyWalletApi.authenticateUser(body);
-
-            console.log(response);
+            
+            login(response)
         } catch (error) {
             alert(error.message);
         } finally {

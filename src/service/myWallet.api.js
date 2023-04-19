@@ -8,7 +8,7 @@ const AxiosIntance = axios.create({
 
 const authenticateUser = async (body) => {
     try {
-        const response = await AxiosIntance.post("auth/login", body);
+        const response = await AxiosIntance.post("/auth/login", body);
         return response.data;
     } catch (error) {
         throw new AxiosError(error.response.data.message);
@@ -17,9 +17,10 @@ const authenticateUser = async (body) => {
 
 const registerUser = async (body) => {
     try {
-        const response = await AxiosIntance.post("auth/register", body);
+        const response = await AxiosIntance.post("/auth/register", body);
         return response.data;
     } catch (error) {
+        console.log(error)
         throw new AxiosError(error.response.data.message);
     }
 };
