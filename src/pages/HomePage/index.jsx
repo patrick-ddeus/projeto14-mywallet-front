@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation } from "react-router-dom";
-import { Container, TitleContainer, TransactionsContainer, TransactionItem, FallBackTransactions } from './styles';
+import { Container, TitleContainer, TransactionsContainer, TransactionItem, FallBackTransactions, NumberParagraph } from './styles';
 import { IoExitOutline } from "react-icons/io5";
 import { AuthContext } from '../../contexts/AuthProvider';
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,7 @@ const HomePage = () => {
     const location = useLocation();
     const { name, token } = location.state;
     const [transactions, setTransactions] = React.useState(null);
-    const { logout } = React.useContext(AuthContext);
+    const { logout, isAuthenticated } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     const { data } = useFetch(
@@ -21,11 +21,17 @@ const HomePage = () => {
             headers: {
                 Authorization: `Bearer ${token}`
             }
-        }, 100000);
+        }, 4000);
 
     React.useEffect(() => {
         setTransactions(data);
     }, [data]);
+
+    React.useEffect(() => {
+        if (!isAuthenticated) {
+            navigate("/");
+        }
+    }, []);
 
     function calculateTotalAndFormat() {
         const total = data.reduce((total, transaction) => total + transaction.balance, 0);
@@ -65,16 +71,17 @@ const HomePage = () => {
                                                 {transaction.description}
                                             </span>
                                         </p>
-                                        <p>
+                                        <NumberParagraph isNegative={transaction.type === "retirada" ? true : false}>
                                             {transaction.balance?.toLocaleString("pt-BR", {
-                                                style: "currency",
-                                                currency: "BRL",
+                                                style: "decimal",
+                                                minimumFractionDigits: 2,
+                                                maximumFractionDigits: 2
                                             })}
-                                        </p>
+                                        </NumberParagraph>
                                     </TransactionItem>
                                 ))}
                             </ul>
-                            <p className='balance'>Saldo: <span>{calculateTotalAndFormat()}</span></p>
+                            <NumberParagraph isNegative={calculateTotalAndFormat() < 0} className='balance'>Saldo: <span>{calculateTotalAndFormat()}</span></NumberParagraph>
                         </>
                     )
                     : (

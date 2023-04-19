@@ -96,3 +96,7 @@ export const FallBackTransactions = styled.div`
     color:#868686;
 `;
 
+
+export const NumberParagraph = styled.p`
+  color:${({isNegative}) => isNegative ? "#C70000" : "#03AC00"}
+`;

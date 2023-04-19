@@ -12,17 +12,22 @@ const TransactionPage = () => {
     const valueRef = React.useRef(null);
     const descriptionRef = React.useRef(null);
     const [isLoading, setIsLoading] = React.useState(false);
-    const { getUserInfo } = React.useContext(AuthContext);
+    const { getUserInfo, isAuthenticated } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     function formatText() {
         return tipo === "deposit" ? "entrada" : "saída";
     }
 
-    async function handleButton() {
-        setIsLoading(true);
+    React.useEffect(() => {
+        if (!isAuthenticated || !getUserInfo()) {
+            navigate("/");
+        }
+    }, []);
 
-        validaForm();
+    async function handleButton() {
+
+        if (!validaForm()) return;
 
         const body = {
             valor: Number(valueRef.current.value.replace(",", ".")),
@@ -37,8 +42,11 @@ const TransactionPage = () => {
             }
         };
 
+        setIsLoading(true);
+
         try {
-            const response = await MyWalletApi.deposit(body, config);
+
+            const response = await MyWalletApi[tipo](body, config);
             alert(response.message);
             navigate("/home", { state: { name, token } });
         } catch (err) {
@@ -50,26 +58,34 @@ const TransactionPage = () => {
 
     function validaForm() {
         const parsedValue = parseInt(valueRef.current.value);
+        let valid = true;
+        const regexDecimal = /^\d+\.\d{2}$/;
 
         if (!parsedValue) {
             alert("Campo valor deve conter apenas números decimais e positivos!");
-            return;
+            valid = false;
+            return valid;
         }
 
-        if (valueRef.current.value % 1 === 0) {
+        if (!regexDecimal.test(valueRef.current.value)) {
             alert("Campo valor deve conter apenas números decimais e positivos!");
-            return;
+            valid = false;
+            return valid;
         }
 
         if (!valueRef.current.value) {
             alert("Preencha o campo valor");
-            return;
+            valid = false;
+            return valid;
         }
 
         if (!descriptionRef.current.value) {
             alert("Preencha o campo descrição");
-            return;
+            valid = false;
+            return valid;
         }
+
+        return valid;
     }
 
     return (

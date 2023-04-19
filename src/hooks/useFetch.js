@@ -15,7 +15,6 @@ const useFetch = (url, options, cacheTime = 0) => {
 
             if (cache[url] && cacheExpireTime < cacheTime) {
                 setData(cache[url].data);
-                console.log("Caiu no cache");
                 setLoading(false);
                 return;
             }
