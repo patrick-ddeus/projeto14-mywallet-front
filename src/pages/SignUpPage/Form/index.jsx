@@ -1,6 +1,7 @@
 import React from 'react';
 import Button from '../../../components/Button';
 import InputField from '../../../components/InputField';
+
 import { Container } from './styles';
 
 const Form = () => {

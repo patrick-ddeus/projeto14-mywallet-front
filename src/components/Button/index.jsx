@@ -2,8 +2,8 @@ import React from 'react';
 import { ThreeDots } from 'react-loader-spinner';
 import { ButtonStyled } from './styles';
 
-const Button = ({ text, loading }) => {
-    return <ButtonStyled disabled={loading}>
+const Button = ({ text, loading, onClick }) => {
+    return <ButtonStyled onClick={onClick} disabled={loading}>
         {loading ? (
             <ThreeDots 
                 height="24"
