@@ -34,10 +34,10 @@ const Form = () => {
 
     return (
         <Container>
-            <InputField placeholder={"Nome"} formRef={nomeRef} />
-            <InputField placeholder={"Email"} formRef={emailRef} />
-            <InputField placeholder={"Senha"} formRef={passwordRef} type="password" />
-            <InputField placeholder={"Confirme a senha"} formRef={confirmPasswordRef} type="password" />
+            <InputField placeholder={"Nome"} inputRef={nomeRef} />
+            <InputField placeholder={"Email"} inputRef={emailRef} />
+            <InputField placeholder={"Senha"} inputRef={passwordRef} type="password" />
+            <InputField placeholder={"Confirme a senha"} inputRef={confirmPasswordRef} type="password" />
             <Button text={"Cadastrar"} loading={loading} onClick={handleRegister} />
         </Container>
     );

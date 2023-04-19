@@ -1,9 +1,9 @@
 import React from 'react';
 import { Input } from './styles';
 
-const InputField = ({ type = "text", placeholder, formRef }) => {
+const InputField = ({ type = "text", placeholder, inputRef }) => {
     return (
-        <Input ref={formRef} type={type} placeholder={placeholder} />
+        <Input ref={inputRef} type={type} placeholder={placeholder} />
     );
 };
 
