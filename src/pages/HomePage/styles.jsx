@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import colors from '../../constants/colors';
 
 export const Container = styled.div`
     width:100vw;
@@ -66,6 +65,17 @@ export const TransactionItem = styled.li`
 
         & span:nth-child(1){
             color:#C6C6C6;
+        }
+
+        & span:nth-child(2){
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          max-width:140px;
+
+          &:hover{
+            overflow:visible;
+          }
         }
 
         display:flex;

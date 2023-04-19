@@ -5,7 +5,8 @@ export const ButtonStyled = styled.button`
   width:326px;
   padding:11px;
   font-size:20px;
-  font-family: inherit;
+  font-family: "Raleway";
+  font-weight: 700;
   border-radius:5px;
   background-color:${colors.button.bgColor};
   border:0;

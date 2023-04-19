@@ -20,13 +20,35 @@ const registerUser = async (body) => {
         const response = await AxiosIntance.post("/auth/register", body);
         return response.data;
     } catch (error) {
-        console.log(error)
+        console.log(error);
+        throw new AxiosError(error.response.data.message);
+    }
+};
+
+const deposit = async (body, config = {}) => {
+    try {
+        const response = await AxiosIntance.post("/bank/transactions/deposit", body, config);
+        return response.data;
+    } catch (error) {
+        console.log(error);
+        throw new AxiosError(error.response.data.message);
+    }
+};
+
+const withdraw = async (body, config = {}) => {
+    try {
+        const response = await AxiosIntance.post("/bank/transactions/withdraw", body, config);
+        return response.data;
+    } catch (error) {
+        console.log(error);
         throw new AxiosError(error.response.data.message);
     }
 };
 
 export default {
     authenticateUser,
-    registerUser
+    registerUser,
+    deposit,
+    withdraw
 }
 
