@@ -8,7 +8,7 @@ const SignInPage = () => {
             <div>
                 <h1>MyWallet</h1>
                 <Form />
-                <Link to={"/"}>Primeira vez? Cadastre-se!</Link>
+                <Link to={"/cadastro"}>Primeira vez? Cadastre-se!</Link>
             </div>
         </Container>
     );
