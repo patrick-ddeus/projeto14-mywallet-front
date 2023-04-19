@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useState, useRef, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 const useFetch = (url, options, cacheTime = 0) => {
-    const cache = useRef({});
+    const cache = JSON.parse(localStorage.getItem("cache")) || {};
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -11,25 +11,27 @@ const useFetch = (url, options, cacheTime = 0) => {
         const fetchData = async () => {
             setLoading(true);
 
-            const cacheExpireTime = Date.now() - cache.current[url]?.timeStamp;
+            const cacheExpireTime = Date.now() - cache[url]?.timeStamp;
 
-            if (cache.current[url] && cacheExpireTime < cacheTime) {
-                setData(cache.current[url].data);
+            if (cache[url] && cacheExpireTime < cacheTime) {
+                setData(cache[url].data);
+                console.log("Caiu no cache");
                 setLoading(false);
                 return;
             }
 
             try {
-                const response = await axios.get(process.env.REACT_APP_API_URL, options);
+                const response = await axios.get(url, options);
                 setData(response.data);
-                cache.current[url] = { data: response.data, timeStamp: Date.now() };
+                cache[url] = { data: response.data, timeStamp: Date.now() };
+                localStorage.setItem("cache", JSON.stringify(cache));
             } catch (err) {
                 setError(err);
             }
         };
 
         fetchData();
-    }, [url, options, cacheTime]);
+    }, [url]);
 
     return { data, loading, error };
 };
