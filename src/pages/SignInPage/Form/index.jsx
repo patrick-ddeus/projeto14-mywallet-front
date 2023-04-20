@@ -37,7 +37,7 @@ const Form = () => {
     return (
         <Container>
             <InputField placeholder={"Email"} inputRef={emailRef} />
-            <InputField placeholder={"Senha"} inputRef={passwordRef} />
+            <InputField placeholder={"Senha"} inputRef={passwordRef} type={"password"}/>
             <Button text={"Entrar"} loading={loading} onClick={handleLogin} />
         </Container>
     );

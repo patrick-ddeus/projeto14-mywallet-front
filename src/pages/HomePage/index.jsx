@@ -60,12 +60,12 @@ const HomePage = () => {
                 <IoExitOutline onClick={handleLogout} />
             </TitleContainer>
             <TransactionsContainer>
-                {transactions ?
+                {transactions.length !== 0 ?
                     (
                         <>
                             <ul>
-                                {transactions?.map((transaction, index) => (
-                                    <TransactionItem key={index}>
+                                {transactions?.map(transaction => (
+                                    <TransactionItem key={transaction._id}>
                                         <p>
                                             <span>
                                                 {formatDate(transaction.date)}
