@@ -1,9 +1,9 @@
 import React from 'react';
 import { Input } from './styles';
 
-const InputField = ({ type = "text", placeholder, inputRef, step }) => {
+const InputField = ({ required, type = "text", placeholder, inputRef, step }) => {
     return (
-        <Input ref={inputRef} type={type} placeholder={placeholder} min={0}/>
+        <Input ref={inputRef} required={required} type={type} placeholder={placeholder} min={0}/>
     );
 };
 

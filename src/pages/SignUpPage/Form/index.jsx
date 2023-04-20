@@ -13,7 +13,9 @@ const Form = () => {
     const [loading, setLoading] = React.useState(false);
     const navigate = useNavigate();
 
-    async function handleRegister() {
+    async function handleRegister(event) {
+        event.preventDefault();
+
         if (passwordRef.current.value !== confirmPasswordRef.current.value) {
             alert("As senhas não coincidem!");
             return;
@@ -27,7 +29,7 @@ const Form = () => {
         };
 
         setLoading(true);
-        
+
         try {
             const response = await MyWalletApi.registerUser(body);
             alert(response.message);
@@ -40,12 +42,12 @@ const Form = () => {
     }
 
     return (
-        <Container>
-            <InputField placeholder={"Nome"} inputRef={nomeRef} />
-            <InputField placeholder={"Email"} inputRef={emailRef} />
-            <InputField placeholder={"Senha"} inputRef={passwordRef} type="password" />
-            <InputField placeholder={"Confirme a senha"} inputRef={confirmPasswordRef} type="password" />
-            <Button text={"Cadastrar"} loading={loading} onClick={handleRegister} />
+        <Container onSubmit={handleRegister}>
+            <InputField required={true} placeholder={"Nome"} inputRef={nomeRef} />
+            <InputField required={true} placeholder={"Email"} inputRef={emailRef} />
+            <InputField required={true} placeholder={"Senha"} inputRef={passwordRef} type="password" />
+            <InputField required={true} placeholder={"Confirme a senha"} inputRef={confirmPasswordRef} type="password" />
+            <Button text={"Cadastrar"} loading={loading} />
         </Container>
     );
 };

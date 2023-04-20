@@ -6,10 +6,11 @@ import { AuthContext } from '../../contexts/AuthProvider';
 import { useNavigate } from "react-router-dom";
 import { Container, InputsArea } from './styles';
 import MyWalletApi from '../../service/myWallet.api';
+import { Input } from '../../components/InputField/styles';
 
 const TransactionPage = () => {
     const { tipo } = useParams();
-    const valueRef = React.useRef(null);
+    const [value, setValue] = React.useState("");
     const descriptionRef = React.useRef(null);
     const [isLoading, setIsLoading] = React.useState(false);
     const { getUserInfo, isAuthenticated } = React.useContext(AuthContext);
@@ -25,12 +26,13 @@ const TransactionPage = () => {
         }
     }, []);
 
-    async function handleButton() {
+    async function handleSubmit(event) {
+        event.preventDefault();
 
         if (!validaForm()) return;
 
         const body = {
-            valor: Number(valueRef.current.value.replace(",", ".")),
+            valor: Number(value.replace(",", ".")),
             descricao: descriptionRef.current.value,
         };
 
@@ -57,27 +59,15 @@ const TransactionPage = () => {
     }
 
     function validaForm() {
-        const parsedValue = parseInt(valueRef.current.value);
         let valid = true;
         const regexDecimal = /^\d+\.\d{2}$/;
 
-        if (!parsedValue) {
-            alert("Campo valor deve conter apenas números decimais e positivos!");
-            valid = false;
-            return valid;
-        }
-
-        if (!regexDecimal.test(valueRef.current.value)) {
-            alert("Campo valor deve conter apenas números decimais e positivos!");
-            valid = false;
-            return valid;
-        }
-
-        if (!valueRef.current.value) {
+        if (!value) {
             alert("Preencha o campo valor");
             valid = false;
             return valid;
         }
+
 
         if (!descriptionRef.current.value) {
             alert("Preencha o campo descrição");
@@ -85,16 +75,30 @@ const TransactionPage = () => {
             return valid;
         }
 
+        if (!regexDecimal.test(value)) {
+            alert("Campo valor deve conter apenas números decimais e positivos!");
+            valid = false;
+            return valid;
+        }
+
+    
         return valid;
     }
+
+    const handleInputChange = (event) => {
+        const value = event.target.value;
+        const numberValue = parseFloat(value);
+        const formattedValue = isNaN(numberValue) ? "0.00" : numberValue.toFixed(2);
+        setValue(formattedValue);
+    };
 
     return (
         <Container>
             <h1>Nova {formatText()}</h1>
-            <InputsArea>
-                <InputField placeholder={"valor"} inputRef={valueRef} type={"number"} />
-                <InputField placeholder={"descrição"} inputRef={descriptionRef} />
-                <Button loading={isLoading} text={`Salvar ${formatText()}`} onClick={handleButton} />
+            <InputsArea onSubmit={handleSubmit}>
+                <Input required={true} placeholder={"valor"} type={"number"} min={0} step={0.01} value={value} onChange={handleInputChange} />
+                <InputField required={true} placeholder={"descrição"} inputRef={descriptionRef} />
+                <Button loading={isLoading} text={`Salvar ${formatText()}`} />
             </InputsArea>
         </Container>
     );

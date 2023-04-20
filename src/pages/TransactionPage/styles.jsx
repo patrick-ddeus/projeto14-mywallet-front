@@ -11,6 +11,6 @@ export const Container = styled.div`
   }
 `;
 
-export const InputsArea = styled.div`
+export const InputsArea = styled.form`
   margin-top:40px;
 `;

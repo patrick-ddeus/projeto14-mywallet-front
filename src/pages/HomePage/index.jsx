@@ -34,14 +34,14 @@ const HomePage = () => {
     }, []);
 
     function calculateTotal() {
-        const total = data.reduce((total, transaction) => {
+        const total = data?.reduce((total, transaction) => {
             if (transaction.type === "deposito") {
                 return total + transaction.balance;
             }
             return total - transaction.balance;
         }, 0);
 
-        return total;
+        return total || 0;
     }
 
     function handleLogout() {
@@ -60,7 +60,7 @@ const HomePage = () => {
                 <IoExitOutline onClick={handleLogout} />
             </TitleContainer>
             <TransactionsContainer>
-                {transactions.length !== 0 ?
+                {transactions?.length !== 0 ?
                     (
                         <>
                             <ul>
@@ -86,7 +86,16 @@ const HomePage = () => {
                                     </TransactionItem>
                                 ))}
                             </ul>
-                            <NumberParagraph isNegative={calculateTotal() < 0} className='balance'>Saldo: <span>{calculateTotal().toFixed(2)}</span></NumberParagraph>
+                            <NumberParagraph isNegative={calculateTotal() < 0} className='balance'>
+                                Saldo:
+                                <span>
+                                    {calculateTotal().toLocaleString("pt-BR", {
+                                        style: "decimal",
+                                        minimumFractionDigits: 2,
+                                        maximumFractionDigits: 2
+                                    })}
+                                </span>
+                            </NumberParagraph>
                         </>
                     )
                     : (
