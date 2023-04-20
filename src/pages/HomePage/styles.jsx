@@ -29,6 +29,7 @@ export const TransactionsContainer = styled.div`
   background-color:#fff;
   border-radius:5px;
   height:446px;
+  position:relative;
 
   ul{
     list-style:none;
@@ -53,7 +54,10 @@ export const TransactionsContainer = styled.div`
     padding:20px;
     font-size:17px;
     font-weight:700;
-    font-family:"Raleway"
+    font-family:"Raleway";
+    position:absolute;
+    width:100%;
+    bottom:0;
   }
 `;
 
@@ -98,5 +102,5 @@ export const FallBackTransactions = styled.div`
 
 
 export const NumberParagraph = styled.p`
-  color:${({isNegative}) => isNegative ? "#C70000" : "#03AC00"}
+  color:${({ isNegative }) => isNegative ? "#C70000" : "#03AC00"}
 `;
