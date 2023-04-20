@@ -33,12 +33,15 @@ const HomePage = () => {
         }
     }, []);
 
-    function calculateTotalAndFormat() {
-        const total = data.reduce((total, transaction) => total + transaction.balance, 0);
-        return total.toLocaleString("pt-BR", {
-            style: "currency",
-            currency: "BRL",
-        });
+    function calculateTotal() {
+        const total = data.reduce((total, transaction) => {
+            if (transaction.type === "deposito") {
+                return total + transaction.balance;
+            }
+            return total - transaction.balance;
+        }, 0);
+
+        return total;
     }
 
     function handleLogout() {
@@ -61,8 +64,8 @@ const HomePage = () => {
                     (
                         <>
                             <ul>
-                                {transactions?.map((transaction) => (
-                                    <TransactionItem>
+                                {transactions?.map((transaction, index) => (
+                                    <TransactionItem key={index}>
                                         <p>
                                             <span>
                                                 {formatDate(transaction.date)}
@@ -72,16 +75,18 @@ const HomePage = () => {
                                             </span>
                                         </p>
                                         <NumberParagraph isNegative={transaction.type === "retirada" ? true : false}>
-                                            {transaction.balance?.toLocaleString("pt-BR", {
-                                                style: "decimal",
-                                                minimumFractionDigits: 2,
-                                                maximumFractionDigits: 2
-                                            })}
+                                            <span>
+                                                {transaction.balance?.toLocaleString("pt-BR", {
+                                                    style: "decimal",
+                                                    minimumFractionDigits: 2,
+                                                    maximumFractionDigits: 2
+                                                })}
+                                            </span>
                                         </NumberParagraph>
                                     </TransactionItem>
                                 ))}
                             </ul>
-                            <NumberParagraph isNegative={calculateTotalAndFormat() < 0} className='balance'>Saldo: <span>{calculateTotalAndFormat()}</span></NumberParagraph>
+                            <NumberParagraph isNegative={calculateTotal() < 0} className='balance'>Saldo: <span>{calculateTotal().toFixed(2)}</span></NumberParagraph>
                         </>
                     )
                     : (

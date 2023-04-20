@@ -58,6 +58,7 @@ export const TransactionsContainer = styled.div`
     position:absolute;
     width:100%;
     bottom:0;
+    color:black;
   }
 `;
 
@@ -102,5 +103,8 @@ export const FallBackTransactions = styled.div`
 
 
 export const NumberParagraph = styled.p`
-  color:${({ isNegative }) => isNegative ? "#C70000" : "#03AC00"}
+  span{
+    color:${({ isNegative }) => isNegative ? "#C70000" : "#03AC00"}
+
+  }
 `;
