@@ -31,7 +31,7 @@ const deposit = async (body, config = {}) => {
         return response.data;
     } catch (error) {
         console.log(error);
-        throw new AxiosError(error.response.data.message);
+        throw new AxiosError(error.response);
     }
 };
 
@@ -41,7 +41,7 @@ const withdraw = async (body, config = {}) => {
         return response.data;
     } catch (error) {
         console.log(error);
-        throw new AxiosError(error.response.data.message);
+        throw new AxiosError(error.response);
     }
 };
 

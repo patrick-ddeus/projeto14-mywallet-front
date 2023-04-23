@@ -2,11 +2,10 @@ import { createContext, useState } from "react";
 
 export const AuthContext = createContext();
 
-const userInfo = JSON.parse(localStorage.getItem("userinfo"));
-
 const AuthProvider = ({ children }) => {
+    const userInfo = JSON.parse(localStorage.getItem("userinfo"));
     const [isAuthenticated, setIsAuthenticated] = useState(userInfo ? true : false);
-
+   
     const login = (userInfo) => {
         setIsAuthenticated(true);
         localStorage.setItem("userinfo", JSON.stringify(userInfo));

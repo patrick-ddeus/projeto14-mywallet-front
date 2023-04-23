@@ -2,11 +2,11 @@ import React from 'react';
 import { useParams } from "react-router-dom";
 import Button from '../../components/Button';
 import InputField from '../../components/InputField';
+import { Input } from '../../components/InputField/styles';
 import { AuthContext } from '../../contexts/AuthProvider';
 import { useNavigate } from "react-router-dom";
 import { Container, InputsArea } from './styles';
 import MyWalletApi from '../../service/myWallet.api';
-import { Input } from '../../components/InputField/styles';
 
 const TransactionPage = () => {
     const { tipo } = useParams();
@@ -47,12 +47,14 @@ const TransactionPage = () => {
         setIsLoading(true);
 
         try {
-
             const response = await MyWalletApi[tipo](body, config);
             alert(response.message);
             navigate("/home", { state: { name, token } });
         } catch (err) {
-            alert(err.message);
+            alert(err.message.data.message)
+            if(err.message.status === 401){
+                navigate("/")
+            }
         } finally {
             setIsLoading(false);
         }
@@ -81,7 +83,6 @@ const TransactionPage = () => {
             return valid;
         }
 
-    
         return valid;
     }
 

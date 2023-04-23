@@ -36,9 +36,9 @@ const HomePage = () => {
     function calculateTotal() {
         const total = data?.reduce((total, transaction) => {
             if (transaction.type === "deposito") {
-                return total + transaction.balance;
+                return total + transaction.amount;
             }
-            return total - transaction.balance;
+            return total - transaction.amount;
         }, 0);
 
         return total || 0;
@@ -76,7 +76,7 @@ const HomePage = () => {
                                         </p>
                                         <NumberParagraph isNegative={transaction.type === "retirada" ? true : false}>
                                             <span>
-                                                {transaction.balance?.toLocaleString("pt-BR", {
+                                                {transaction.amount?.toLocaleString("pt-BR", {
                                                     style: "decimal",
                                                     minimumFractionDigits: 2,
                                                     maximumFractionDigits: 2
