@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import React from 'react';
 import { useLocation } from "react-router-dom";
 import { Container, TitleContainer, TransactionsContainer, TransactionItem, FallBackTransactions, NumberParagraph } from './styles';
@@ -10,31 +11,33 @@ import ButtonsArea from './ButtonsArea';
 
 const HomePage = () => {
     const location = useLocation();
-    const { name, token } = location.state;
     const [transactions, setTransactions] = React.useState(null);
     const { logout, isAuthenticated } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
-    const { data } = useFetch(
-        `${process.env.REACT_APP_API_URL}/bank/transactions`,
-        {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        }, 4000);
-
-    React.useEffect(() => {
-        setTransactions(data);
-    }, [data]);
-
     React.useEffect(() => {
         if (!isAuthenticated) {
             navigate("/");
+            return
         }
+        console.log(isAuthenticated)
+
+        const { token } = location.state;
+
+        const { data } = useFetch(
+            `${process.env.REACT_APP_API_URL}/bank/transactions`,
+            {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            }, 4000);
+
+        setTransactions(data);
     }, []);
+ 
 
     function calculateTotal() {
-        const total = data?.reduce((total, transaction) => {
+        const total = transactions?.reduce((total, transaction) => {
             if (transaction.type === "deposito") {
                 return total + transaction.amount;
             }
@@ -56,7 +59,7 @@ const HomePage = () => {
     return (
         <Container>
             <TitleContainer>
-                <h1>Olá, {name} </h1>
+                <h1>Olá, {location.state?.name} </h1>
                 <IoExitOutline onClick={handleLogout} />
             </TitleContainer>
             <TransactionsContainer>
