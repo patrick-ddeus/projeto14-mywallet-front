@@ -6,35 +6,36 @@ import { IoExitOutline } from "react-icons/io5";
 import { AuthContext } from '../../contexts/AuthProvider';
 import { useNavigate } from "react-router-dom";
 import dayjs from "dayjs";
-import useFetch from '../../hooks/useFetch';
 import ButtonsArea from './ButtonsArea';
+import axios from 'axios';
 
 const HomePage = () => {
     const location = useLocation();
     const [transactions, setTransactions] = React.useState(null);
-    const { logout, isAuthenticated } = React.useContext(AuthContext);
+    const { logout, isAuthenticated, getUserInfo } = React.useContext(AuthContext);
     const navigate = useNavigate();
 
     React.useEffect(() => {
         if (!isAuthenticated) {
             navigate("/");
-            return
+            return;
         }
-        console.log(isAuthenticated)
-
-        const { token } = location.state;
-
-        const { data } = useFetch(
-            `${process.env.REACT_APP_API_URL}/bank/transactions`,
-            {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }, 4000);
-
-        setTransactions(data);
+        const { token } = getUserInfo();
+        async function fetchData(){
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_API_URL}/bank/transactions`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`
+                    }
+                });
+                setTransactions(response.data);
+            } catch (err) {
+                alert(err.message)
+            }
+        }
+        fetchData()
     }, []);
- 
+
 
     function calculateTotal() {
         const total = transactions?.reduce((total, transaction) => {
